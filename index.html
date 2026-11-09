@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07141d">
+  <title>Logo Games — каталог игр</title>
+  <style>
+    :root { color-scheme: dark; --gold:#ffd77b; --paper:#f8edcf; --sea:#07141d; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; min-height:100vh; color:var(--paper); font-family:Georgia,"Times New Roman",serif; background:radial-gradient(ellipse at 50% 0,#244958 0,#102531 48%,var(--sea) 100%); }
+    header { padding:64px 20px 34px; text-align:center; }
+    header p { color:#d5c6a3; font: .9rem Arial,sans-serif; letter-spacing:.2em; text-transform:uppercase; }
+    h1 { margin:.2em 0; font-size:clamp(2.6rem,8vw,5rem); color:#fff0ca; text-shadow:0 4px 20px #000; }
+    header .intro { max-width:620px; margin:14px auto; color:#d8d1bd; font:1.05rem/1.6 Arial,sans-serif; }
+    main { width:min(1000px,100%); margin:auto; padding:16px 20px 70px; }
+    h2 { color:var(--gold); font-size:2rem; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(270px,100%),1fr)); gap:20px; }
+    .card { display:flex; flex-direction:column; min-height:320px; overflow:hidden; border:1px solid #d6aa5a55; border-radius:18px; background:#0b1c25; box-shadow:0 16px 36px #0006; }
+    .art { min-height:190px; display:grid; place-items:center; overflow:hidden; background:linear-gradient(180deg,#193849,#28606a 70%,#102d39); }
+    .art svg { width:100%; max-height:220px; }
+    .details { display:flex; flex:1; flex-direction:column; padding:20px; }
+    .details h3 { margin:0 0 8px; color:#ffe4a8; font-size:1.45rem; }
+    .details p { flex:1; margin:0 0 18px; color:#d3c7a8; font:1rem/1.55 Arial,sans-serif; }
+    a.play { display:inline-block; align-self:flex-start; padding:12px 20px; border:1px solid #ffe19a; border-radius:999px; color:#291a0d; background:linear-gradient(#ffd77b,#d89432); font:700 1rem Arial,sans-serif; text-decoration:none; }
+    a.play:hover { filter:brightness(1.1); }
+    footer { padding:22px; color:#aeb8b6; text-align:center; font: .9rem Arial,sans-serif; }
+  </style>
+</head>
+<body>
+  <header>
+    <p>Маленькие приключения в браузере</p>
+    <h1>Logo Games</h1>
+    <div class="intro">Моя коллекция простых игр. Выбирай игру и отправляйся в приключение!</div>
+  </header>
+  <main id="catalog">
+    <h2>Каталог игр</h2>
+    <div class="grid">
+      <article class="card">
+        <div class="art" aria-hidden="true">
+          <svg viewBox="0 0 600 230" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="468" cy="48" r="29" fill="#ffe6ad" opacity=".85"/>
+            <path d="M60 178 Q170 160 290 178 T530 175 V230 H40Z" fill="#246071"/>
+            <path d="M300 37v133M220 77h170M270 50h85" stroke="#4b3020" stroke-width="9"/>
+            <path d="M295 52l-65 25h65zM305 57h56v47h-56zM215 84l-36 35h36zM225 85h42v34h-42z" fill="#e9ddbd" stroke="#88785b" stroke-width="3"/>
+            <path d="M75 162q120 22 230 8 110 18 215-16l-35 47q-170 24-355 0z" fill="#59371f" stroke="#281914" stroke-width="7"/>
+            <path d="M300 37q31-10 55 2l-12 18q-24-9-43-3z" fill="#171717"/>
+          </svg>
+        </div>
+        <div class="details">
+          <h3>Пиратский корабль</h3>
+          <p>Исследуй корабль, собирай предметы и найди ключ от сундука с сокровищами. В игре есть звук волн и анимация инвентаря.</p>
+          <a class="play" href="./pirate-ship/">Играть</a>
+        </div>
+      </article>
+    </div>
+  </main>
+  <footer>Новые игры будут появляться здесь.</footer>
+</body>
+</html>
