@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#d95f3f">
+  <meta name="description" content="Игровая полка для логопеда — игры и упражнения для чтения и автоматизации звуков.">
+  <title>Игровая полка для логопеда</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body id="top">
+  <a class="skip-link" href="#catalog">Перейти к каталогу</a>
+  <div class="page-shell">
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="Игровая полка для логопеда — на главную">
+        <svg class="brand-mark" aria-hidden="true" viewBox="0 0 48 48">
+          <defs>
+            <linearGradient id="brand-planet" x1="13" y1="12" x2="35" y2="38" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#f6a778"/>
+              <stop offset="1" stop-color="#d95f3f"/>
+            </linearGradient>
+          </defs>
+          <ellipse cx="24" cy="25" rx="22" ry="10" fill="none" stroke="#d95f3f" stroke-width="1.8" transform="rotate(18 24 25)"/>
+          <ellipse cx="24" cy="25" rx="21" ry="8" fill="none" stroke="#c7e85a" stroke-width="3" transform="rotate(-25 24 25)"/>
+          <circle cx="24" cy="23" r="12" fill="url(#brand-planet)"/>
+          <path d="M16 21c4-5 11-7 16-4M18 29c4 2 9 2 13-1" fill="none" stroke="#f6a778" stroke-linecap="round" stroke-width="2"/>
+          <ellipse cx="24" cy="25" rx="21" ry="8" fill="none" stroke="#c7e85a" stroke-width="3" stroke-dasharray="20 52" transform="rotate(-25 24 25)"/>
+        </svg>
+        <span class="brand-name">Игровая полка<span class="brand-light">для логопеда</span></span>
+      </a>
+      <a class="header-link" href="#catalog">Каталог <span aria-hidden="true">↘</span></a>
+    </header>
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="eyebrow-dot"></span> ИГРАЕМ, ЧИТАЕМ, ГОВОРИМ</p>
+          <h1 id="hero-title">Играем и учимся<br><span>говорить красиво.</span></h1>
+          <p class="hero-description">Яркие игры для чтения и занятий со звуками. Выбирай нужное упражнение и начинай играть.</p>
+          <a class="primary-button" href="#catalog">Выбрать игру <span aria-hidden="true">↓</span></a>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="art-orbit orbit-one"></div><div class="art-orbit orbit-two"></div>
+          <div class="art-star star-one">✦</div><div class="art-star star-two">✳</div>
+          <div class="art-planet"><span>ИГРАЙ</span></div>
+          <div class="art-caption">ИГРАЕМ<br><span>И ГОВОРИМ</span></div>
+        </div>
+        <div class="hero-bottom">
+          <span>УЧИМСЯ ИГРАЯ</span>
+          <span class="hero-counter"><span id="hero-count">00</span> ПРИМЕРОВ В КАТАЛОГЕ</span>
+        </div>
+      </section>
+      <section class="catalog-section" id="catalog" aria-labelledby="catalog-title">
+        <div class="section-heading">
+          <div><p class="eyebrow section-eyebrow">ВЫБИРАЙ НАПРАВЛЕНИЕ</p><h2 id="catalog-title">Игры и <span>задания</span></h2></div>
+          <p class="section-note">Примеры карточек для занятий. Категории помогут быстро найти нужное.</p>
+        </div>
+        <div class="catalog-tools">
+          <div class="filters" role="group" aria-label="Фильтр по направлению занятия" id="filters"></div>
+          <label class="search-box">
+            <span class="visually-hidden">Поиск по названию или категории</span>
+            <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 4.5 4.5"></path></svg>
+            <input id="search" type="search" placeholder="Найти игру..." autocomplete="off"><kbd>/</kbd>
+          </label>
+        </div>
+        <p class="demo-notice"><span aria-hidden="true">✦</span> Это демонстрационные карточки, а не реальные игры. Замени их своими в <code>script.js</code>.</p>
+        <div class="games-grid" id="games-grid" aria-live="polite"></div>
+        <p class="empty-state" id="empty-state" hidden>Ничего не нашлось. Попробуй другое название или жанр.</p>
+      </section>
+    </main>
+    <footer class="site-footer">
+      <a class="brand footer-brand" href="#top" aria-label="Игровая полка для логопеда — наверх"><svg class="brand-mark" aria-hidden="true" viewBox="0 0 48 48">
+        <defs>
+          <linearGradient id="footer-brand-planet" x1="13" y1="12" x2="35" y2="38" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#f6a778"/>
+            <stop offset="1" stop-color="#d95f3f"/>
+          </linearGradient>
+        </defs>
+        <ellipse cx="24" cy="25" rx="22" ry="10" fill="none" stroke="#d95f3f" stroke-width="1.8" transform="rotate(18 24 25)"/>
+        <ellipse cx="24" cy="25" rx="21" ry="8" fill="none" stroke="#c7e85a" stroke-width="3" transform="rotate(-25 24 25)"/>
+        <circle cx="24" cy="23" r="12" fill="url(#footer-brand-planet)"/>
+        <path d="M16 21c4-5 11-7 16-4M18 29c4 2 9 2 13-1" fill="none" stroke="#f6a778" stroke-linecap="round" stroke-width="2"/>
+        <ellipse cx="24" cy="25" rx="21" ry="8" fill="none" stroke="#c7e85a" stroke-width="3" stroke-dasharray="20 52" transform="rotate(-25 24 25)"/>
+      </svg><span class="brand-name">Игровая полка<span class="brand-light">для логопеда</span></span></a>
+      <nav class="contact-links" aria-label="Связаться с автором">
+        <a href="https://t.me/logoped_ada" target="_blank" rel="noopener noreferrer">Telegram <span>@logoped_ada</span></a>
+        <a href="https://www.instagram.com/logoped_ada/" target="_blank" rel="noopener noreferrer">Instagram <span>@logoped_ada</span></a>
+        <a href="mailto:musalimova.ad@icloud.com">Почта <span>musalimova.ad@icloud.com</span></a>
+      </nav>
+      <p class="author-credit">Автор: <span>Logoped_Ada</span></p>
+      <a class="back-top" href="#top">Наверх ↑</a>
+    </footer>
+  </div>
+</body>
+</html>
