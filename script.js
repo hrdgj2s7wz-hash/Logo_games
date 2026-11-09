@@ -1,12 +1,12 @@
 const games = [
-  { title: "Звуковая охота", genre: "Звуки Ш, Ж, Ч", description: "Ищи предметы со звуками Ш, Ж и Ч, слушай слова и собирай золотые монеты.", symbol: "Ш", tag: "Ш · Ж · Ч", colors: ["#b75d35", "#f7c968"], url: "./games/zvukovaya-ohota/index.html", isLive: true, cover: "treasure" },
+  { title: "Звуковая охота", genre: "Звуки Ш, Ж, Щ, Ч", description: "Ищи предметы со звуками Ш, Ж и Ч, слушай слова и собирай золотые монеты.", symbol: "Ш", tag: "Ш · Ж · Ч", colors: ["#b75d35", "#f7c968"], url: "./games/zvukovaya-ohota/index.html", isLive: true, cover: "treasure" },
 ];
 
 const grid = document.querySelector("#games-grid");
 const filters = document.querySelector("#filters");
 const search = document.querySelector("#search");
 const emptyState = document.querySelector("#empty-state");
-const genres = ["Все", "Чтение", "Звуки С, З, Ц", "Звуки Ш, Ж, Ч", "Звук Р", "Звук Л", "АГ"];
+const genres = ["Все", "Чтение", "Звуки С, З, Ц", "Звуки Ш, Ж, Щ, Ч", "Звук Р", "Звук Л", "АГ"];
 let activeGenre = "Все";
 
 function renderFilters() {
