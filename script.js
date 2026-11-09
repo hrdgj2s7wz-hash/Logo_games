@@ -1,5 +1,5 @@
 const games = [
-  { title: "Звуковая охота", genre: "Звуки Ш, Ж, Ч", description: "Ищи предметы со звуками Ш, Ж и Ч, слушай слова и собирай золотые монеты.", symbol: "Ш", tag: "Ш · Ж · Ч", colors: ["#75c9e8", "#b9e8f4"], url: "./games/zvukovaya-ohota/index.html", isLive: true },
+  { title: "Звуковая охота", genre: "Звуки Ш, Ж, Ч", description: "Ищи предметы со звуками Ш, Ж и Ч, слушай слова и собирай золотые монеты.", symbol: "Ш", tag: "Ш · Ж · Ч", colors: ["#b75d35", "#f7c968"], url: "./games/zvukovaya-ohota/index.html", isLive: true, cover: "treasure" },
   { title: "Собери слово", genre: "Чтение", description: "Складывай слоги и читай новые слова.", symbol: "А", tag: "Читаем", colors: ["#f3a276", "#f7c4a0"], url: "https://example.com/" },
   { title: "Звуковой поезд", genre: "Звуки С, З, Ц", description: "Помоги вагончикам найти слова с нужными звуками.", symbol: "С", tag: "С · З · Ц", colors: ["#a9d943", "#d7ed7b"], url: "https://example.com/" },
   { title: "Шипящий лабиринт", genre: "Звуки Ш, Ж, Ч", description: "Ищи дорожку к картинкам со звуками Ш, Ж и Ч.", symbol: "Ш", tag: "Ш · Ж · Ч", colors: ["#75c9e8", "#b9e8f4"], url: "https://example.com/" },
@@ -31,10 +31,24 @@ function renderGames() {
 
   grid.innerHTML = visibleGames.map((game) => {
     const [startColor, endColor] = game.colors;
+    const coverArt = game.cover === "treasure"
+      ? `<svg class="treasure-chest" aria-hidden="true" viewBox="0 0 160 120">
+          <ellipse cx="78" cy="104" rx="54" ry="8" fill="#6b351f" opacity=".22"/>
+          <circle cx="45" cy="35" r="13" fill="#ffd95e" stroke="#a85d27" stroke-width="3"/>
+          <circle cx="71" cy="25" r="15" fill="#ffe998" stroke="#bd7814" stroke-width="3"/>
+          <circle cx="101" cy="32" r="13" fill="#ffd95e" stroke="#a85d27" stroke-width="3"/>
+          <path d="M37 67c0-22 18-39 41-39s42 17 42 39H37Z" fill="#c47a30" stroke="#70401f" stroke-width="4"/>
+          <path d="M31 65h99v38H31z" rx="7" fill="#a85d27" stroke="#70401f" stroke-width="4"/>
+          <path d="M36 72h89v9H36zm0 22h89v5H36z" fill="#d58a3d"/>
+          <path d="M75 64h14v40H75z" fill="#f5d166" stroke="#9c681e" stroke-width="3"/>
+          <path d="M75 78h14v12H75z" fill="#ffe28a" stroke="#9c681e" stroke-width="2"/>
+          <circle cx="82" cy="84" r="2" fill="#8b571a"/>
+        </svg>`
+      : `<span class="cover-symbol" aria-hidden="true">${game.symbol}</span>`;
     return `<article class="game-card">
       <div class="game-cover" style="background:radial-gradient(circle at 50% 45%,${endColor},${startColor} 76%)">
         <span class="cover-index">ИГРА ${String(games.indexOf(game) + 1).padStart(2, "0")}</span>
-        <span class="cover-symbol" aria-hidden="true">${game.symbol}</span><span class="cover-tag">${game.tag}</span>
+        ${coverArt}<span class="cover-tag">${game.tag}</span>
       </div>
       <div class="game-info"><div class="game-meta"><span class="game-genre">${game.genre}</span><span>${game.isLive ? "ИГРА" : "ДЕМО"}</span></div>
         <h3 class="game-title">${game.title}</h3><p class="game-description">${game.description}</p>
