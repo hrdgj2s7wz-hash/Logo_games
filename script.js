@@ -1,11 +1,5 @@
 const games = [
   { title: "Звуковая охота", genre: "Звуки Ш, Ж, Ч", description: "Ищи предметы со звуками Ш, Ж и Ч, слушай слова и собирай золотые монеты.", symbol: "Ш", tag: "Ш · Ж · Ч", colors: ["#b75d35", "#f7c968"], url: "./games/zvukovaya-ohota/index.html", isLive: true, cover: "treasure" },
-  { title: "Собери слово", genre: "Чтение", description: "Складывай слоги и читай новые слова.", symbol: "А", tag: "Читаем", colors: ["#f3a276", "#f7c4a0"], url: "https://example.com/" },
-  { title: "Звуковой поезд", genre: "Звуки С, З, Ц", description: "Помоги вагончикам найти слова с нужными звуками.", symbol: "С", tag: "С · З · Ц", colors: ["#a9d943", "#d7ed7b"], url: "https://example.com/" },
-  { title: "Шипящий лабиринт", genre: "Звуки Ш, Ж, Ч", description: "Ищи дорожку к картинкам со звуками Ш, Ж и Ч.", symbol: "Ш", tag: "Ш · Ж · Ч", colors: ["#75c9e8", "#b9e8f4"], url: "https://example.com/" },
-  { title: "Ракета для Р", genre: "Звук Р", description: "Собирай картинки и тренируй звук Р в словах.", symbol: "Р", tag: "Звук Р", colors: ["#ee805a", "#ffc27d"], url: "https://example.com/" },
-  { title: "Лесные дорожки", genre: "Звук Л", description: "Помоги героям пройти путь и назови слова со звуком Л.", symbol: "Л", tag: "Звук Л", colors: ["#b2d94d", "#e3ef8f"], url: "https://example.com/" },
-  { title: "Алфавитный город", genre: "АГ", description: "Исследуй буквы и выполняй задания в игровом городе.", symbol: "Б", tag: "АГ", colors: ["#73c8ea", "#c2e8f5"], url: "https://example.com/" }
 ];
 
 const grid = document.querySelector("#games-grid");
