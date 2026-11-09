@@ -1,0 +1,1526 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#fff8ed">
+  <title>Звуковая охота — игра на звуки Ш, Ж и Ч</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+      color: #29334d;
+      background: #fff8ed;
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+      --ink: #29334d;
+      --muted: #788096;
+      --purple: #7960d8;
+      --purple-dark: #6148bf;
+      --paper: #fffdf9;
+      --gold: #f5b925;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      min-width: 320px;
+      min-height: 100vh;
+      margin: 0;
+      background:
+        radial-gradient(ellipse at 7% 12%, #ffebc5 0, transparent 26rem),
+        radial-gradient(ellipse at 92% 78%, #e8e4ff 0, transparent 28rem),
+        #fff8ed;
+    }
+
+    button { font: inherit; }
+
+    .page {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 52px;
+    }
+
+    .topline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      font-weight: 900;
+      letter-spacing: -.03em;
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      border-radius: 14px;
+      background: #ffe3a2;
+      font-size: 24px;
+      transform: rotate(-5deg);
+    }
+
+    .brand-mark svg { width: 34px; height: 34px; }
+
+    .sound-note {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .header-tools {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 18px;
+    }
+
+    .global-stats {
+      display: flex;
+      gap: 8px;
+    }
+
+    .global-stat {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 11px;
+      border: 1px solid #f0dfb8;
+      border-radius: 14px;
+      background: #fffaf0;
+      color: #76512c;
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .global-stat-icon { font-size: 17px; }
+    .global-stat-value { color: #49365f; font-size: 15px; }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: clamp(24px, 5vw, 48px);
+      border: 1px solid #f1e7d8;
+      border-radius: 30px;
+      background: var(--paper);
+      box-shadow: 0 18px 50px #503b2410;
+    }
+
+    .hero[hidden], .game[hidden] { display: none; }
+
+    .hero::after {
+      position: absolute;
+      top: -50px;
+      right: -25px;
+      color: #fff0cf;
+      content: "✦";
+      font-size: clamp(140px, 26vw, 250px);
+      line-height: 1;
+      pointer-events: none;
+      transform: rotate(12deg);
+    }
+
+    .hero-content { position: relative; z-index: 1; }
+
+    .eyebrow {
+      margin: 0 0 10px;
+      color: var(--purple);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 680px;
+      margin: 0;
+      font-size: clamp(32px, 6vw, 56px);
+      letter-spacing: -.055em;
+      line-height: 1.03;
+    }
+
+    .hero-copy {
+      max-width: 590px;
+      margin: 16px 0 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .catalog-back {
+      display: inline-flex;
+      min-height: 42px;
+      align-items: center;
+      gap: 8px;
+      margin-top: 20px;
+      padding: 9px 14px;
+      border: 1px solid #ebdfcd;
+      border-radius: 14px;
+      background: #fff9ee;
+      color: #76512c;
+      font-size: 13px;
+      font-weight: 900;
+      text-decoration: none;
+      transition: border-color .16s ease, background .16s ease, transform .16s ease;
+    }
+
+    .catalog-back:hover {
+      border-color: #d3aa5b;
+      background: #fff2d6;
+      transform: translateX(-2px);
+    }
+
+    .catalog-back:focus-visible {
+      outline: 3px solid #8e78e8;
+      outline-offset: 3px;
+    }
+
+    .levels {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 28px;
+    }
+
+    .final-reward-link {
+      display: block;
+      margin: 22px auto 0;
+      padding: 12px 18px;
+      border: 1px solid #d5a333;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #fff1b8, #ffe08a);
+      color: #70451e;
+      cursor: pointer;
+      font: inherit;
+      font-weight: 900;
+      box-shadow: 0 4px 0 #e7c56e;
+    }
+
+    .final-reward-link:hover { filter: brightness(1.04); transform: translateY(-1px); }
+    .final-reward-link[hidden] { display: none; }
+
+    .level-button {
+      position: relative;
+      display: grid;
+      min-height: 255px;
+      justify-items: center;
+      align-content: center;
+      gap: 13px;
+      padding: 23px 17px 19px;
+      overflow: hidden;
+      border: 2px solid #ead8b9;
+      border-radius: 24px;
+      background: linear-gradient(160deg, #fffefa 0%, #fff8e9 100%);
+      color: var(--ink);
+      cursor: pointer;
+      text-align: center;
+      box-shadow: 0 7px 0 #e7d4b2, 0 14px 26px #503b2410;
+      transition: border-color .18s ease, transform .18s ease, box-shadow .18s ease;
+    }
+
+    .level-button:hover {
+      border-color: #d3aa5b;
+      box-shadow: 0 9px 0 #e7d4b2, 0 20px 30px #503b2420;
+      transform: translateY(-4px);
+    }
+
+    .level-button:active {
+      box-shadow: 0 3px 0 #e7d4b2, 0 8px 18px #503b2418;
+      transform: translateY(3px);
+    }
+
+    .level-button::after {
+      position: absolute;
+      top: 13px;
+      right: 16px;
+      color: #e7bd63;
+      content: "✦";
+      font-size: 20px;
+    }
+
+    .chest-art {
+      position: relative;
+      display: block;
+      width: 112px;
+      height: 91px;
+      filter: drop-shadow(0 7px 5px #6a3b2530);
+      transition: transform .18s ease;
+    }
+
+    .level-button:hover .chest-art { transform: scale(1.07) rotate(-2deg); }
+
+    .chest-lid {
+      position: absolute;
+      top: 12px;
+      left: 10px;
+      width: 92px;
+      height: 32px;
+      border: 4px solid #754422;
+      border-radius: 18px 18px 7px 7px;
+      background: linear-gradient(180deg, #c9853e 0%, #a95f2d 100%);
+      box-shadow: inset 0 5px 0 #e5a65d;
+    }
+
+    .chest-base {
+      position: absolute;
+      right: 8px;
+      bottom: 8px;
+      left: 8px;
+      height: 49px;
+      border: 4px solid #754422;
+      border-radius: 6px 6px 12px 12px;
+      background: repeating-linear-gradient(90deg, #a9602e 0 24px, #c17a3a 24px 29px);
+      box-shadow: inset 0 -7px 0 #814a29, inset 0 5px 0 #d9954e;
+    }
+
+    .chest-band {
+      position: absolute;
+      z-index: 1;
+      top: 10px;
+      bottom: 6px;
+      left: 50%;
+      width: 18px;
+      border: 3px solid #9a681e;
+      background: linear-gradient(90deg, #f8d873, #eab744 45%, #ffe79a);
+      box-shadow: 0 0 0 1px #70451e;
+      transform: translateX(-50%);
+    }
+
+    .chest-lock {
+      position: absolute;
+      z-index: 2;
+      bottom: 21px;
+      left: 50%;
+      display: grid;
+      width: 21px;
+      height: 23px;
+      place-items: center;
+      border: 2px solid #9a681e;
+      border-radius: 5px;
+      background: #ffdf73;
+      color: #754422;
+      font-size: 12px;
+      line-height: 1;
+      transform: translateX(-50%);
+    }
+
+    .level-label { display: grid; gap: 5px; }
+    .level-label strong { font-size: 19px; letter-spacing: -.03em; }
+    .level-label small { color: var(--muted); font-size: 13px; }
+
+    .chest-prompt {
+      color: #a16a2a;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .game-nav {
+      display: flex;
+      justify-content: flex-start;
+      margin: 0 0 18px;
+    }
+
+    .back-button {
+      display: inline-flex;
+      min-height: 42px;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 14px;
+      border: 1px solid #ebdfcd;
+      border-radius: 14px;
+      background: #fff9ee;
+      color: #76512c;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 900;
+      transition: border-color .16s ease, background .16s ease, transform .16s ease;
+    }
+
+    .back-button:hover {
+      border-color: #d3aa5b;
+      background: #fff2d6;
+      transform: translateX(-2px);
+    }
+
+    .game {
+      margin-top: 24px;
+      padding: clamp(18px, 4vw, 32px);
+      border: 1px solid #f1e7d8;
+      border-radius: 30px;
+      background: var(--paper);
+      box-shadow: 0 18px 50px #503b2410;
+    }
+
+    .game-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 22px;
+    }
+
+    .game-header h2 {
+      margin: 0;
+      font-size: clamp(22px, 4vw, 30px);
+      letter-spacing: -.04em;
+    }
+
+    .game-header p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .progress-card {
+      min-width: 125px;
+      padding: 12px 16px;
+      border-radius: 18px;
+      background: #f6f2ff;
+      text-align: center;
+    }
+
+    .progress-count { display: block; font-size: 24px; font-weight: 900; }
+    .progress-caption { color: var(--muted); font-size: 11px; }
+
+    .progress-track {
+      height: 9px;
+      margin: 0 0 23px;
+      overflow: hidden;
+      border-radius: 99px;
+      background: #eeeaf5;
+    }
+
+    .progress-fill {
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #a58af4, #6e55ce);
+      transition: width .25s ease;
+    }
+
+    .item-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .item-card {
+      position: relative;
+      display: grid;
+      min-height: 125px;
+      align-content: center;
+      justify-items: center;
+      gap: 8px;
+      padding: 13px 8px;
+      border: 2px solid #f1ece5;
+      border-radius: 20px;
+      background: #fff;
+      color: var(--ink);
+      cursor: pointer;
+      transition: border-color .16s ease, background .16s ease, transform .16s ease;
+    }
+
+    .item-card:hover {
+      border-color: #c5b9f4;
+      background: #fcfbff;
+      transform: translateY(-3px);
+    }
+
+    .item-card:focus-visible, .level-button:focus-visible, .restart-button:focus-visible, .back-button:focus-visible {
+      outline: 3px solid #8e78e8;
+      outline-offset: 3px;
+    }
+
+    .item-card.is-found {
+      border-color: #d29a26;
+      background: linear-gradient(145deg, #fff8df, #ffedac);
+      box-shadow: inset 0 0 0 2px #f7d875, 0 5px 13px #dca82724;
+    }
+
+    .item-emoji { font-size: 39px; line-height: 1; }
+    .item-emoji svg { display: block; width: 58px; height: 58px; }
+    .item-name { font-size: 13px; font-weight: 800; }
+    #item-grid[data-level="3"] .item-name { display: none; }
+    #item-grid .item-card.is-found .item-name { display: none; }
+    .item-card.is-found .item-emoji { display: grid; width: 72px; height: 72px; place-items: center; }
+    .treasure-coin { width: 66px !important; height: 66px !important; filter: drop-shadow(0 4px 3px #8f631f40); }
+
+    .position-game {
+      margin-top: 24px;
+      padding: 22px;
+      border: 1px solid #e8e1f8;
+      border-radius: 22px;
+      background: #faf8ff;
+    }
+
+    .position-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .position-header h3 {
+      margin: 0;
+      font-size: 21px;
+      letter-spacing: -.03em;
+    }
+
+    .position-header p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .position-count {
+      flex: 0 0 auto;
+      padding: 8px 11px;
+      border-radius: 12px;
+      background: #eee9ff;
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .position-prompt {
+      margin: 0;
+      font-size: 17px;
+      font-weight: 800;
+      line-height: 1.5;
+    }
+
+    .position-word {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 18px 0 16px;
+    }
+
+    .position-picture {
+      display: grid;
+      width: 88px;
+      height: 88px;
+      flex: 0 0 auto;
+      place-items: center;
+      border: 1px solid #e8e1f8;
+      border-radius: 22px;
+      background: #fff;
+      font-size: 53px;
+      box-shadow: 0 5px 14px #503b240d;
+    }
+    .position-picture svg { width: 74px; height: 74px; }
+
+    .position-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .position-choice {
+      display: grid;
+      justify-items: center;
+      gap: 7px;
+    }
+
+    .position-option {
+      display: grid;
+      width: 68px;
+      height: 68px;
+      place-items: center;
+      padding: 0;
+      border: 2px solid #654bc7;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 24%, #fff 0, #e1d8ff 12%, #a48df1 38%, #755bd5 76%, #5940b2 100%);
+      color: #fff;
+      cursor: pointer;
+      font-size: 25px;
+      font-weight: 900;
+      text-shadow: 0 1px 3px #38277c88;
+      box-shadow: inset -5px -7px 10px #49359255, inset 3px 4px 8px #fff8, 0 5px 9px #48339430;
+      transition: border-color .16s ease, box-shadow .16s ease, transform .16s ease, filter .16s ease;
+    }
+
+    .position-option:hover:not(:disabled) {
+      filter: brightness(1.07);
+      transform: translateY(-3px);
+    }
+
+    .position-option:disabled { cursor: default; }
+    .position-option.is-selected { outline: 4px solid #f5b925; outline-offset: 3px; }
+    .position-option.is-correct {
+      border-color: #25874c;
+      background: radial-gradient(circle at 30% 24%, #fff 0, #d9f9e3 12%, #72c88c 42%, #279354 100%);
+      box-shadow: inset -5px -7px 10px #17643b55, inset 3px 4px 8px #fff8, 0 0 0 4px #9bddad;
+    }
+    .position-option.is-wrong {
+      border-color: #a9483d;
+      background: radial-gradient(circle at 30% 24%, #fff 0, #ffe2dc 12%, #ed9585 42%, #c85d50 100%);
+      box-shadow: inset -5px -7px 10px #84362e55, inset 3px 4px 8px #fff8, 0 0 0 4px #f0b0a5;
+    }
+
+    .position-caption {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .position-listen, .position-next {
+      min-height: 42px;
+      padding: 10px 15px;
+      border: 1px solid #e1daf4;
+      border-radius: 13px;
+      background: #fff;
+      color: var(--ink);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 800;
+      transition: border-color .16s ease, background .16s ease, transform .16s ease;
+    }
+
+    .position-listen:hover, .position-next:hover {
+      border-color: #9c87e8;
+      transform: translateY(-1px);
+    }
+
+    .position-listen { margin-left: auto; }
+
+    .position-option:focus-visible, .position-listen:focus-visible, .position-next:focus-visible {
+      outline: 3px solid #8e78e8;
+      outline-offset: 3px;
+    }
+
+    .position-feedback {
+      min-height: 20px;
+      margin: 14px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .site-footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px 18px;
+      padding: 24px 12px 0;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .site-footer a {
+      color: var(--purple-dark);
+      font-weight: 800;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+
+    .position-feedback.is-good { color: #24854b; font-weight: 800; }
+    .position-feedback.is-try { color: #a26b14; font-weight: 800; }
+    .position-next { margin-top: 12px; border-color: var(--purple); background: var(--purple); color: #fff; }
+    .position-next[hidden] { display: none; }
+
+    .position-chest-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin: 16px 0 0 10px;
+      padding: 9px 14px 9px 9px;
+      border: 1px solid #e8d1a2;
+      border-radius: 15px;
+      background: linear-gradient(145deg, #fffdf6, #fff2d6);
+      color: #70451e;
+      cursor: pointer;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 900;
+      box-shadow: 0 3px 0 #e7d4b2;
+      transition: transform .16s ease, box-shadow .16s ease;
+    }
+
+    .position-chest-link:hover {
+      box-shadow: 0 5px 0 #e7d4b2;
+      transform: translateY(-2px);
+    }
+
+    .position-chest-link:focus-visible {
+      outline: 3px solid #8e78e8;
+      outline-offset: 3px;
+    }
+
+    .position-chest-link svg { width: 43px; height: 36px; }
+    .position-chest-link[hidden] { display: none; }
+
+    .game-footer {
+      display: flex;
+      min-height: 42px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .feedback { min-height: 20px; margin: 0; }
+    .feedback.is-good { color: #24854b; font-weight: 800; }
+    .feedback.is-try { color: #a26b14; }
+
+    .restart-button {
+      padding: 9px 13px;
+      border: 1px solid #e8e1d8;
+      border-radius: 12px;
+      background: #fff;
+      color: var(--ink);
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .reward {
+      position: fixed;
+      z-index: 5;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+      background: #26213d99;
+      backdrop-filter: blur(5px);
+    }
+
+    .reward[hidden] { display: none; }
+
+    .reward-dialog {
+      width: min(480px, 100%);
+      padding: 32px 24px;
+      border: 1px solid #fff;
+      border-radius: 30px;
+      background: #fffdf7;
+      box-shadow: 0 25px 90px #17112655;
+      text-align: center;
+      animation: pop .3s ease both;
+    }
+
+    @keyframes pop {
+      from { opacity: 0; transform: scale(.9) translateY(10px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .reward-dialog h2 {
+      margin: 0;
+      font-size: 32px;
+      letter-spacing: -.05em;
+    }
+
+    .reward-dialog p { margin: 10px 0 18px; color: var(--muted); }
+
+    .reward-stars {
+      display: flex;
+      justify-content: center;
+      gap: clamp(3px, 2vw, 12px);
+      margin: 8px 0 22px;
+      color: var(--gold);
+      font-size: clamp(39px, 12vw, 64px);
+      text-shadow: 0 4px 0 #d9950d, 0 8px 16px #db970c40;
+      animation: shine .7s ease-in-out infinite alternate;
+    }
+
+    @keyframes shine {
+      to { filter: brightness(1.13); transform: scale(1.035); }
+    }
+
+    .reward-dialog .restart-button {
+      padding: 12px 20px;
+      border-color: var(--purple-dark);
+      background: var(--purple);
+      color: white;
+      font-size: 14px;
+    }
+
+    .final-reward-dialog {
+      width: min(520px, 100%);
+      border-color: #ffe59a;
+      background: radial-gradient(ellipse at 50% 30%, #fff8df 0%, #fffdf7 67%);
+    }
+
+    .final-reward-dialog h2 { color: #8d5b12; }
+    .final-reward-dialog p { font-size: 17px; font-weight: 800; }
+    .final-chest-art {
+      display: block;
+      width: min(260px, 72vw);
+      height: auto;
+      margin: 0 auto 8px;
+      filter: drop-shadow(0 10px 8px #9a641d36);
+      animation: shine .9s ease-in-out infinite alternate;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @media (max-width: 700px) {
+      .levels { grid-template-columns: 1fr; gap: 14px; }
+      .level-button { min-height: 200px; }
+      .item-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 9px; }
+      .item-card { min-height: 112px; }
+    }
+
+    @media (max-width: 430px) {
+      .page { width: min(100% - 20px, 1120px); padding-top: 16px; }
+      .topline { margin-bottom: 14px; }
+      .topline { align-items: flex-start; }
+      .header-tools { align-items: flex-end; flex-direction: column-reverse; gap: 8px; }
+      .sound-note { max-width: 135px; font-size: 11px; }
+      .global-stats { gap: 5px; }
+      .global-stat { gap: 4px; padding: 6px 8px; font-size: 10px; }
+      .global-stat-value { font-size: 13px; }
+      .game-header { gap: 10px; }
+      .progress-card { min-width: 94px; padding: 10px; }
+      .item-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .item-card { min-height: 105px; }
+      .item-name { font-size: 12px; }
+      .game-footer { align-items: flex-start; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="topline">
+      <div class="brand"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 48 48" focusable="false"><circle cx="15" cy="12" r="7" fill="#ffd95e" stroke="#bd7814" stroke-width="2"/><circle cx="29" cy="10" r="7" fill="#ffe998" stroke="#bd7814" stroke-width="2"/><path d="M7 22h34v17H7z" rx="4" fill="#a85d27" stroke="#70401f" stroke-width="2.5"/><path d="M9 24h30v5H9zm0 9h30v4H9z" fill="#d58a3d"/><path d="M21 21h7v19h-7z" fill="#f5d166" stroke="#9c681e" stroke-width="1.5"/><path d="M21 28h7v6h-7z" fill="#ffe28a" stroke="#9c681e" stroke-width="1.2"/><circle cx="24.5" cy="31" r="1" fill="#8b571a"/></svg></span><span>Звуковая охота</span></div>
+      <div class="header-tools">
+        <div class="global-stats" role="group" aria-label="Общий прогресс">
+          <div class="global-stat"><span class="global-stat-icon" aria-hidden="true">🪙</span><span class="global-stat-value" id="total-coins" aria-live="polite">0 / 21</span><span>монет</span></div>
+          <div class="global-stat"><span class="global-stat-icon" aria-hidden="true">⭐</span><span class="global-stat-value" id="total-stars" aria-live="polite">0 / 15</span><span>звёзд</span></div>
+        </div>
+        <div class="sound-note"><span aria-hidden="true">🔊</span><span>Нажми на предмет, чтобы услышать его название</span></div>
+      </div>
+    </header>
+
+    <section class="hero" id="level-select" aria-labelledby="page-title">
+      <div class="hero-content">
+        <p class="eyebrow">Карта звуковых сокровищ</p>
+        <h1 id="page-title">Выбери свой сундук!</h1>
+        <p class="hero-copy">В каждом сундуке спрятаны задания на внимательность и звуки. Открой уровень, чтобы начать поиски.</p>
+        <a class="catalog-back" href="../../index.html#catalog"><span aria-hidden="true">←</span> Вернуться в каталог</a>
+        <button class="final-reward-link" id="show-final-reward" type="button" hidden>Посмотреть финальную награду</button>
+        <nav class="levels" aria-label="Уровни сложности">
+          <button class="level-button" type="button" data-level="0" aria-pressed="false">
+            <span class="chest-art" aria-hidden="true"><span class="chest-lid"></span><span class="chest-base"></span><span class="chest-band"></span><span class="chest-lock">✦</span></span>
+            <span class="level-label"><strong>Уровень 1</strong><small>Охота за звуком Ш</small></span>
+            <span class="chest-prompt">Нажми, чтобы открыть</span>
+          </button>
+          <button class="level-button" type="button" data-level="1" aria-pressed="false">
+            <span class="chest-art" aria-hidden="true"><span class="chest-lid"></span><span class="chest-base"></span><span class="chest-band"></span><span class="chest-lock">✦</span></span>
+            <span class="level-label"><strong>Уровень 2</strong><small>Охота за звуками Ш и Ж</small></span>
+            <span class="chest-prompt">Нажми, чтобы открыть</span>
+          </button>
+          <button class="level-button" type="button" data-level="2" aria-pressed="false">
+            <span class="chest-art" aria-hidden="true"><span class="chest-lid"></span><span class="chest-base"></span><span class="chest-band"></span><span class="chest-lock">✦</span></span>
+            <span class="level-label"><strong>Уровень 3</strong><small>Охота за звуками Ш, Ж и Ч</small></span>
+            <span class="chest-prompt">Нажми, чтобы открыть</span>
+          </button>
+        </nav>
+      </div>
+    </section>
+
+    <section class="game" id="game-screen" aria-labelledby="game-title" hidden>
+      <div class="game-nav">
+        <button class="back-button" id="back-to-levels" type="button"><span aria-hidden="true">←</span> К выбору сундука</button>
+      </div>
+      <div class="game-header">
+        <div>
+          <h2 id="game-title" tabindex="-1">Найди предметы со звуком Ш</h2>
+          <p id="game-instructions">Нажимай на картинки и собирай все подходящие предметы.</p>
+        </div>
+        <div class="progress-card" aria-live="polite">
+          <span class="progress-count" id="progress-count">0 / 7</span>
+          <span class="progress-caption">предметов найдено</span>
+        </div>
+      </div>
+      <div class="progress-track" role="progressbar" aria-label="Найдено подходящих предметов" aria-valuemin="0" aria-valuemax="7" aria-valuenow="0" id="progress-bar">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+      <div class="item-grid" id="item-grid" aria-label="Предметы на уровне"></div>
+      <section class="position-game" aria-labelledby="position-title">
+        <div class="position-header">
+          <div>
+            <h3 id="position-title">Где звук в слове?</h3>
+            <p>Послушай слово и определи, где слышится указанный звук. Если звук повторяется, укажи место его первого произнесения.</p>
+          </div>
+          <span class="position-count" id="position-count" aria-live="polite"></span>
+        </div>
+        <div class="position-word">
+          <div class="position-picture" id="position-picture" role="img"></div>
+          <p class="position-prompt" id="position-prompt"></p>
+        </div>
+        <div class="position-actions" id="position-options"></div>
+        <p class="position-feedback" id="position-feedback" role="status" aria-live="polite"></p>
+        <button class="position-next" id="position-next" type="button" hidden>Следующее задание</button>
+        <button class="position-chest-link" id="position-chest-link" type="button" hidden>
+          <svg viewBox="0 0 64 52" aria-hidden="true" focusable="false">
+            <path d="M7 23h50v24H7z" fill="#a85d27" stroke="#70401f" stroke-width="3" stroke-linejoin="round"/>
+            <path d="M9 25h46v7H9zm0 12h46v7H9z" fill="#cf843d"/>
+            <path d="M13 21c1-10 8-16 19-16s18 6 19 16Z" fill="#bb7135" stroke="#70401f" stroke-width="3"/>
+            <path d="M28 22h8v26h-8z" fill="#f5d166" stroke="#9c681e" stroke-width="2"/>
+            <path d="M28 31h8v8h-8z" fill="#ffe28a" stroke="#9c681e" stroke-width="1.5"/>
+            <circle cx="32" cy="35" r="1.5" fill="#8b571a"/>
+          </svg>
+          <span>Выбрать другой уровень</span>
+        </button>
+      </section>
+      <div class="game-footer">
+        <p class="feedback" id="feedback" role="status" aria-live="polite">Нажми на предмет — игра произнесёт его название.</p>
+        <button class="restart-button" id="restart-button" type="button">Заново пройти задание</button>
+      </div>
+    </section>
+  </main>
+
+  <div class="reward" id="reward" hidden>
+    <section class="reward-dialog" role="dialog" aria-modal="true" aria-labelledby="reward-title">
+      <h2 id="reward-title">Уровень пройден!</h2>
+      <p id="reward-message">Все 7 предметов найдены. Награда за уровень: +5 золотых звёздочек!</p>
+      <div class="reward-stars" role="img" aria-label="Награда: пять золотых звёздочек">★ ★ ★ ★ ★</div>
+      <button class="restart-button" id="reward-restart" type="button">Продолжить игру</button>
+    </section>
+  </div>
+  <div class="reward" id="final-reward" hidden>
+    <section class="reward-dialog final-reward-dialog" role="dialog" aria-modal="true" aria-labelledby="final-reward-title">
+      <svg class="final-chest-art" viewBox="0 0 240 190" role="img" aria-labelledby="treasure-chest-title">
+        <title id="treasure-chest-title">Открытый сундук, полный золотых монет и звёзд</title>
+        <path d="M37 89 47 47q3-12 17-12h112q14 0 17 12l10 42Z" fill="#a85d27" stroke="#70401f" stroke-width="7" stroke-linejoin="round"/>
+        <path d="m51 81 8-31q2-7 10-7h101q8 0 10 7l8 31Z" fill="#f3bd46" stroke="#d28b20" stroke-width="5"/>
+        <path d="M61 79c6-22 26-21 34-4 9-25 34-25 43-2 14-22 35-14 40 7Z" fill="#ffd95e" stroke="#d28b20" stroke-width="4"/>
+        <circle cx="87" cy="68" r="13" fill="#ffe998" stroke="#d28b20" stroke-width="4"/>
+        <circle cx="123" cy="60" r="15" fill="#f8c640" stroke="#d28b20" stroke-width="4"/>
+        <circle cx="158" cy="68" r="13" fill="#ffe998" stroke="#d28b20" stroke-width="4"/>
+        <path d="m120 43 5 10 11 2-8 8 2 11-10-5-10 5 2-11-8-8 11-2Z" fill="#fff5be" stroke="#d28b20" stroke-width="2"/>
+        <path d="M30 90h180v68q0 11-12 11H42q-12 0-12-11Z" fill="#a85d27" stroke="#70401f" stroke-width="7"/>
+        <path d="M39 99h162v48H39Z" fill="#c77b36" stroke="#f0bd5a" stroke-width="5"/>
+        <path d="M42 116h156m-156 17h156" stroke="#8c4d27" stroke-width="5"/>
+        <path d="M108 91h24v77h-24z" fill="#f5d166" stroke="#9c681e" stroke-width="5"/>
+        <path d="M108 120h24v24h-24z" fill="#ffe28a" stroke="#9c681e" stroke-width="4"/>
+        <circle cx="120" cy="132" r="4" fill="#8b571a"/>
+        <path d="m39 157 12 9h138l12-9" fill="none" stroke="#e9b65a" stroke-width="5"/>
+        <path d="m47 23 5-11 5 11 11 5-11 5-5 11-5-11-11-5Zm132 6 4-9 4 9 9 4-9 4-4 9-4-9-9-4Zm-62-18 4-8 4 8 8 4-8 4-4 8-4-8-8-4Z" fill="#ffd64f" stroke="#d99a20" stroke-width="2"/>
+      </svg>
+      <h2 id="final-reward-title">Молодец! Ты прошёл все три уровня!</h2>
+      <p>Ты собрал все 21 монету и заработал 15 золотых звёзд!</p>
+      <div class="reward-stars" role="img" aria-label="Пять золотых звёздочек; всего 15 за три уровня">★ ★ ★ ★ ★</div>
+      <button class="restart-button" id="final-reward-close" type="button">К выбору сундуков</button>
+      <button class="final-reward-link" id="start-over" type="button">Начать заново и сбросить награды</button>
+    </section>
+  </div>
+  <footer class="site-footer">
+    <span>Автор: Logoped_Ada</span>
+    <a href="mailto:musalimova.ad@icloud.com?subject=%D0%9E%D1%88%D0%B8%D0%B1%D0%BA%D0%B0%20%D0%B2%20%D0%B8%D0%B3%D1%80%D0%B5%20%C2%AB%D0%97%D0%B2%D1%83%D0%BA%D0%BE%D0%B2%D0%B0%D1%8F%20%D0%BE%D1%85%D0%BE%D1%82%D0%B0%C2%BB">Сообщить об ошибке: musalimova.ad@icloud.com</a>
+  </footer>
+
+  <script>
+    const LEVELS = [
+      {
+        title: "Найди предметы со звуком Ш",
+        sounds: ["ш"],
+        items: [
+          ["шапка", "🧢"], ["шарф", "🧣"], ["мышь", "🐭"], ["машина", "🚗"],
+          ["карандаш", "✏️"], ["лошадь", "🐴"], ["шишка", "🌰"],
+          ["кот", "🐱"], ["дом", "🏠"], ["яблоко", "🍎"], ["книга", "📕"],
+          ["стул", "🪑"], ["мяч", "⚽"], ["часы", "⏰"], ["жук", "🐞"],
+          ["цветок", "🌷"], ["рыба", "🐟"], ["зонт", "☂️"], ["пижама", "🛌"], ["сок", "🧃"]
+        ],
+        positionTasks: [
+          { word: "шапка", sound: "ш", phonemes: ["ʂ", "a", "p", "k", "ə"] },
+          { word: "шарф", sound: "ш", phonemes: ["ʂ", "a", "r", "f"] },
+          { word: "мышь", sound: "ш", phonemes: ["m", "ɨ", "ʂ"] },
+          { word: "машина", sound: "ш", phonemes: ["m", "ɐ", "ʂ", "ɨ", "n", "ə"] },
+          { word: "карандаш", sound: "ш", phonemes: ["k", "ə", "r", "ə", "n", "d", "a", "ʂ"] },
+          { word: "лошадь", sound: "ш", phonemes: ["l", "ɐ", "ʂ", "ɪ", "tʲ"] },
+          { word: "шишка", sound: "ш", phonemes: ["ʂ", "ɨ", "ʂ", "k", "ə"] }
+        ]
+      },
+      {
+        title: "Найди предметы со звуками Ш и Ж",
+        sounds: ["ш", "ж"],
+        items: [
+          ["шапка", "🧢"], ["машина", "🚗"], ["мышь", "🐭"], ["шарф", "🧣"],
+          ["жук", "🐞"], ["пижама", "🛌"], ["мороженое", "🍦"],
+          ["кот", "🐱"], ["дом", "🏠"], ["яблоко", "🍎"], ["книга", "📕"],
+          ["стул", "🪑"], ["мяч", "⚽"], ["часы", "⏰"], ["цветок", "🌷"],
+          ["рыба", "🐟"], ["зонт", "☂️"], ["сок", "🧃"], ["банан", "🍌"], ["свеча", "🕯️"]
+        ],
+        positionTasks: [
+          { word: "шапка", sound: "ш", phonemes: ["ʂ", "a", "p", "k", "ə"] },
+          { word: "машина", sound: "ш", phonemes: ["m", "ɐ", "ʂ", "ɨ", "n", "ə"] },
+          { word: "мышь", sound: "ш", phonemes: ["m", "ɨ", "ʂ"] },
+          { word: "шарф", sound: "ш", phonemes: ["ʂ", "a", "r", "f"] },
+          { word: "жук", sound: "ж", phonemes: ["ʐ", "u", "k"] },
+          { word: "пижама", sound: "ж", phonemes: ["pʲ", "ɪ", "ʐ", "a", "m", "ə"] },
+          { word: "мороженое", sound: "ж", phonemes: ["m", "ɐ", "r", "o", "ʐ", "ɨ", "n", "ə", "j", "ə"] }
+        ]
+      },
+      {
+        title: "Найди предметы со звуками Ш, Ж и Ч",
+        sounds: ["ш", "ж", "ч"],
+        items: [
+          ["чашка", "☕"], ["жук", "🐞"], ["шапка", "🧢"], ["часы", "⏰"],
+          ["мяч", "⚽"], ["шарф", "🧣"], ["пижама", "🛌"],
+          ["кот", "🐱"], ["дом", "🏠"], ["яблоко", "🍎"], ["книга", "📕"],
+          ["стул", "🪑"], ["цветок", "🌷"], ["рыба", "🐟"], ["зонт", "☂️"],
+          ["сок", "🧃"], ["банан", "🍌"], ["огурец", "🥒"], ["лук", "🧅"], ["арбуз", "🍉"]
+        ],
+        positionTasks: [
+          { word: "чашка", sound: "ч", phonemes: ["tɕ", "a", "ʂ", "k", "ə"] },
+          { word: "жук", sound: "ж", phonemes: ["ʐ", "u", "k"] },
+          { word: "шапка", sound: "ш", phonemes: ["ʂ", "a", "p", "k", "ə"] },
+          { word: "часы", sound: "ч", phonemes: ["tɕ", "ɪ", "s", "ɨ"] },
+          { word: "мяч", sound: "ч", phonemes: ["mʲ", "æ", "tɕ"] },
+          { word: "шарф", sound: "ш", phonemes: ["ʂ", "a", "r", "f"] },
+          { word: "пижама", sound: "ж", phonemes: ["pʲ", "ɪ", "ʐ", "a", "m", "ə"] }
+        ]
+      }
+    ];
+
+    const TOTAL_ITEMS = 20;
+    const REQUIRED_ITEMS = 7;
+    const letterForSound = { "ш": "ш", "ж": "ж", "ч": "ч" };
+    const SVG_NS = "http://www.w3.org/2000/svg";
+
+    function createIllustrationShape(svg, tag, attributes) {
+      const shape = document.createElementNS(SVG_NS, tag);
+      for (const [name, value] of Object.entries(attributes)) shape.setAttribute(name, value);
+      svg.append(shape);
+    }
+
+    function createWordIllustration(word) {
+      if (!["шапка", "пижама", "лук"].includes(word)) return null;
+
+      const svg = document.createElementNS(SVG_NS, "svg");
+      svg.setAttribute("viewBox", "0 0 120 100");
+      svg.setAttribute("aria-hidden", "true");
+      svg.setAttribute("focusable", "false");
+
+      if (word === "шапка") {
+        createIllustrationShape(svg, "circle", { cx: "60", cy: "17", r: "10", fill: "#f6b83f", stroke: "#d68c24", "stroke-width": "3" });
+        createIllustrationShape(svg, "path", { d: "M25 64c1-21 14-35 35-35s34 14 35 35l10 4c4 2 3 8-2 8H17c-5 0-6-6-2-8l10-4Z", fill: "#7960d8", stroke: "#4e399f", "stroke-width": "4", "stroke-linejoin": "round" });
+        createIllustrationShape(svg, "path", { d: "M18 67c17 6 67 6 84 0", fill: "none", stroke: "#b8a8ff", "stroke-width": "4", "stroke-linecap": "round" });
+      } else if (word === "пижама") {
+        createIllustrationShape(svg, "path", { d: "M17 29 30 20h15l14 9 9 17-11 7-7-10v39H20V43l-7 10-11-7 15-17Z", fill: "#44a8a2", stroke: "#247b77", "stroke-width": "4", "stroke-linejoin": "round" });
+        createIllustrationShape(svg, "path", { d: "M31 21c0 10 13 10 13 0", fill: "none", stroke: "#d5f3df", "stroke-width": "4", "stroke-linecap": "round" });
+        createIllustrationShape(svg, "path", { d: "M37 39v43", fill: "none", stroke: "#b6e4dd", "stroke-width": "3", "stroke-linecap": "round" });
+        createIllustrationShape(svg, "circle", { cx: "42", cy: "48", r: "1.8", fill: "#e7fff5" });
+        createIllustrationShape(svg, "circle", { cx: "42", cy: "60", r: "1.8", fill: "#e7fff5" });
+        createIllustrationShape(svg, "path", { d: "M73 23h34v18l-5 41H84l-2-30-3 30H62l-5-41V23h16Z", fill: "#44a8a2", stroke: "#247b77", "stroke-width": "4", "stroke-linejoin": "round" });
+        createIllustrationShape(svg, "path", { d: "M59 41h48M82 42l2 10", fill: "none", stroke: "#b6e4dd", "stroke-width": "3", "stroke-linecap": "round" });
+      } else {
+        createIllustrationShape(svg, "path", { d: "M60 33c-16 7-30 23-29 40 1 16 13 24 29 24s28-8 29-24c1-17-13-33-29-40Z", fill: "#c98a55", stroke: "#98603b", "stroke-width": "4" });
+        createIllustrationShape(svg, "path", { d: "M60 39c-7 13-9 34-7 52m10-52c7 14 9 32 7 52", fill: "none", stroke: "#e5b47c", "stroke-width": "4", "stroke-linecap": "round" });
+        createIllustrationShape(svg, "path", { d: "M58 38c-12-12-8-24-5-30 12 9 14 18 10 30m2 0c3-16 13-23 23-24-2 15-10 23-20 27m-9-2C47 27 37 25 29 28c6 12 15 17 29 15", fill: "#49a65a", stroke: "#2c7d43", "stroke-width": "3", "stroke-linejoin": "round" });
+      }
+      return svg;
+    }
+
+    function appendWordIllustration(container, word, fallbackEmoji) {
+      const illustration = createWordIllustration(word);
+      if (illustration) container.append(illustration);
+      else container.textContent = fallbackEmoji;
+    }
+
+    function createTreasureCoin() {
+      const svg = document.createElementNS(SVG_NS, "svg");
+      svg.setAttribute("viewBox", "0 0 100 100");
+      svg.setAttribute("class", "treasure-coin");
+      svg.setAttribute("aria-hidden", "true");
+      svg.setAttribute("focusable", "false");
+      createIllustrationShape(svg, "circle", { cx: "50", cy: "50", r: "43", fill: "#d68b12", stroke: "#9b5b0d", "stroke-width": "5" });
+      createIllustrationShape(svg, "circle", { cx: "50", cy: "47", r: "35", fill: "#f6c445", stroke: "#ffe38a", "stroke-width": "5" });
+      createIllustrationShape(svg, "circle", { cx: "50", cy: "47", r: "27", fill: "none", stroke: "#d99520", "stroke-width": "3" });
+      createIllustrationShape(svg, "path", { d: "m50 27 6 13 14 2-10 10 2 15-12-7-12 7 2-15-10-10 14-2 6-13Z", fill: "#fff2b0", stroke: "#bd7814", "stroke-width": "3", "stroke-linejoin": "round" });
+      return svg;
+    }
+
+    function hasTargetSound(name, sounds) {
+      const word = name.toLocaleLowerCase("ru-RU");
+      return sounds.some(sound => word.includes(letterForSound[sound]));
+    }
+
+    function validateLevels() {
+      for (const [index, level] of LEVELS.entries()) {
+        const names = level.items.map(([name]) => name);
+        const matching = names.filter(name => hasTargetSound(name, level.sounds));
+        if (names.length !== TOTAL_ITEMS || new Set(names).size !== TOTAL_ITEMS || matching.length !== REQUIRED_ITEMS) {
+          throw new Error(`В уровне ${index + 1} должно быть 20 разных предметов, из них ровно 7 подходящих.`);
+        }
+      }
+    }
+
+    validateLevels();
+
+    const levelButtons = [...document.querySelectorAll(".level-button")];
+    const levelSelect = document.querySelector("#level-select");
+    const gameScreen = document.querySelector("#game-screen");
+    const backToLevels = document.querySelector("#back-to-levels");
+    const gameTitle = document.querySelector("#game-title");
+    const grid = document.querySelector("#item-grid");
+    const progressCount = document.querySelector("#progress-count");
+    const progressBar = document.querySelector("#progress-bar");
+    const progressFill = document.querySelector("#progress-fill");
+    const positionCount = document.querySelector("#position-count");
+    const positionPicture = document.querySelector("#position-picture");
+    const positionPrompt = document.querySelector("#position-prompt");
+    const positionOptions = document.querySelector("#position-options");
+    const positionFeedback = document.querySelector("#position-feedback");
+    const positionNext = document.querySelector("#position-next");
+    const positionChestLink = document.querySelector("#position-chest-link");
+    const feedback = document.querySelector("#feedback");
+    const reward = document.querySelector("#reward");
+    const finalReward = document.querySelector("#final-reward");
+    const showFinalRewardButton = document.querySelector("#show-final-reward");
+    const finalRewardClose = document.querySelector("#final-reward-close");
+    const startOverButton = document.querySelector("#start-over");
+    const totalCoins = document.querySelector("#total-coins");
+    const totalStars = document.querySelector("#total-stars");
+    const PROGRESS_STORAGE_KEY = "sound-hunt-progress-v1";
+    let activeLevel = 0;
+    let globalProgress = loadGlobalProgress();
+    let foundItems = new Set();
+    let shuffledItems = [];
+    let positionTaskIndex = 0;
+    let positionTaskAnswered = false;
+    let positionTaskFinished = false;
+    let positionCorrectAnswers = 0;
+
+    function shuffle(items) {
+      const result = [...items];
+      for (let index = result.length - 1; index > 0; index--) {
+        const other = Math.floor(Math.random() * (index + 1));
+        [result[index], result[other]] = [result[other], result[index]];
+      }
+      return result;
+    }
+
+    function selectRussianVoice(voices) {
+      const russianVoices = voices.filter(voice => voice.lang?.toLowerCase().startsWith("ru"));
+      if (russianVoices.length === 0) return null;
+
+      const score = voice => {
+        const details = `${voice.name} ${voice.voiceURI}`.toLowerCase();
+        return (voice.lang?.toLowerCase() === "ru-ru" ? 20 : 0)
+          + (/\b(natural|neural)\b/.test(details) ? 100 : 0)
+          + (/\b(online|premium)\b/.test(details) ? 20 : 0)
+          + (/\b(google|yandex)\b/.test(details) ? 10 : 0)
+          + (voice.default ? 1 : 0);
+      };
+
+      return russianVoices.reduce((best, voice) => score(voice) > score(best) ? voice : best);
+    }
+
+    function speak(name) {
+      if (!("speechSynthesis" in window) || !("SpeechSynthesisUtterance" in window)) {
+        feedback.textContent = `Название «${name}» — озвучивание не поддерживается этим браузером.`;
+        feedback.className = "feedback is-try";
+        return;
+      }
+      const utterance = new SpeechSynthesisUtterance(name);
+      utterance.lang = "ru-RU";
+      utterance.rate = 0.82;
+      utterance.pitch = 1.05;
+      utterance.volume = 1;
+
+      const synthesis = window.speechSynthesis;
+      const voices = typeof synthesis.getVoices === "function" ? synthesis.getVoices() : [];
+      const voice = selectRussianVoice(voices);
+      if (voice) utterance.voice = voice;
+
+      synthesis.cancel();
+      synthesis.speak(utterance);
+    }
+
+    function setFeedback(message, tone = "") {
+      feedback.textContent = message;
+      feedback.className = `feedback${tone ? ` is-${tone}` : ""}`;
+    }
+
+    function getSoundPosition(task) {
+      const soundPhonemes = { "ш": "ʂ", "ж": "ʐ", "ч": "tɕ" };
+      const index = task.phonemes.indexOf(soundPhonemes[task.sound]);
+      if (index === -1) throw new Error(`В транскрипции слова «${task.word}» нет звука ${task.sound}.`);
+      if (index === 0) return "beginning";
+      if (index === task.phonemes.length - 1) return "end";
+      return "middle";
+    }
+
+    function renderPositionTask() {
+      const tasks = LEVELS[activeLevel].positionTasks;
+      const task = tasks[positionTaskIndex];
+      positionTaskAnswered = false;
+      positionTaskFinished = false;
+      const picture = LEVELS[activeLevel].items.find(([name]) => name === task.word)?.[1];
+      positionPicture.replaceChildren();
+      appendWordIllustration(positionPicture, task.word, picture);
+      positionPicture.setAttribute("aria-label", `Картинка: ${task.word}`);
+      positionCount.textContent = `Задание ${positionTaskIndex + 1} из ${tasks.length}`;
+      positionPrompt.textContent = `Послушай слово. Где в нём находится звук [${task.sound}${task.sound === "ч" ? "’" : ""}]?`;
+      positionOptions.replaceChildren();
+
+      const positionButtons = [];
+      for (const [number, position, label] of [[1, "beginning", "В начале"], [2, "middle", "В середине"], [3, "end", "В конце"]]) {
+        const choice = document.createElement("div");
+        choice.className = "position-choice";
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "position-option";
+        button.dataset.position = position;
+        button.setAttribute("aria-label", `${number}. ${label} слова`);
+        button.setAttribute("aria-pressed", "false");
+        const ballNumber = document.createElement("span");
+        ballNumber.setAttribute("aria-hidden", "true");
+        ballNumber.textContent = String(number);
+        button.append(ballNumber);
+        const caption = document.createElement("span");
+        caption.className = "position-caption";
+        caption.textContent = label;
+        choice.append(button, caption);
+        positionButtons.push(button);
+        button.addEventListener("click", () => {
+          if (positionTaskAnswered) return;
+          positionTaskAnswered = true;
+          const correctPosition = getSoundPosition(task);
+          const correct = position === correctPosition;
+          if (correct) positionCorrectAnswers++;
+          positionFeedback.textContent = correct
+            ? `Верно! Первый звук [${task.sound}${task.sound === "ч" ? "’" : ""}] в слове «${task.word}» — ${label.toLowerCase()}.`
+            : `Пока неверно. Первый звук [${task.sound}${task.sound === "ч" ? "’" : ""}] в слове «${task.word}» — ${correctPosition === "beginning" ? "в начале" : correctPosition === "middle" ? "в середине" : "в конце"}.`;
+          positionFeedback.className = `position-feedback ${correct ? "is-good" : "is-try"}`;
+          for (const option of positionButtons) {
+            option.disabled = true;
+            if (option === button) {
+              option.setAttribute("aria-pressed", "true");
+              option.classList.add("is-selected");
+            }
+            if (option.dataset.position === correctPosition) option.classList.add("is-correct");
+            else if (option === button) option.classList.add("is-wrong");
+          }
+          positionNext.hidden = false;
+          positionNext.textContent = positionTaskIndex === tasks.length - 1 ? "Завершить задание" : "Следующее задание";
+        });
+        positionOptions.append(choice);
+      }
+
+      const listenButton = document.createElement("button");
+      listenButton.type = "button";
+      listenButton.className = "position-listen";
+      listenButton.textContent = "🔊 Послушать слово";
+      listenButton.addEventListener("click", () => speak(task.word));
+      positionOptions.append(listenButton);
+
+      positionFeedback.textContent = "";
+      positionFeedback.className = "position-feedback";
+      positionNext.hidden = true;
+      positionChestLink.hidden = true;
+    }
+
+    function validatePositionTasks() {
+      for (const [index, level] of LEVELS.entries()) {
+        const targetWords = level.items.map(([name]) => name).filter(name => hasTargetSound(name, level.sounds));
+        const taskWords = level.positionTasks.map(task => task.word);
+        if (taskWords.length !== REQUIRED_ITEMS || new Set(taskWords).size !== REQUIRED_ITEMS
+          || taskWords.some(name => !targetWords.includes(name)
+            || !level.items.some(([itemName, emoji]) => itemName === name && Boolean(emoji)))) {
+          throw new Error(`В заданиях уровня ${index + 1} должны быть только 7 разных правильных слов этого уровня.`);
+        }
+        for (const task of level.positionTasks) getSoundPosition(task);
+      }
+    }
+
+    function emptyGlobalProgress() {
+      return {
+        version: 1,
+        coinsByLevel: LEVELS.map(() => []),
+        rewardedLevels: []
+      };
+    }
+
+    function loadGlobalProgress() {
+      let serialized;
+      try {
+        serialized = window.localStorage.getItem(PROGRESS_STORAGE_KEY);
+      } catch (error) {
+        console.warn("Не удалось прочитать сохранённый прогресс; игра начнётся без него.", error);
+        return emptyGlobalProgress();
+      }
+
+      if (serialized === null) return emptyGlobalProgress();
+
+      try {
+        const saved = JSON.parse(serialized);
+        const validShape = saved?.version === 1
+          && Array.isArray(saved.coinsByLevel)
+          && saved.coinsByLevel.length === LEVELS.length
+          && Array.isArray(saved.rewardedLevels);
+        if (!validShape) throw new Error("Неверный формат прогресса.");
+
+        const coinsByLevel = saved.coinsByLevel.map((coins, levelIndex) => {
+          if (!Array.isArray(coins) || coins.some(name => typeof name !== "string")) {
+            throw new Error(`Неверный список монет уровня ${levelIndex + 1}.`);
+          }
+          const targets = LEVELS[levelIndex].items
+            .map(([name]) => name)
+            .filter(name => hasTargetSound(name, LEVELS[levelIndex].sounds));
+          if (new Set(coins).size !== coins.length || coins.some(name => !targets.includes(name))) {
+            throw new Error(`Сохранённые монеты уровня ${levelIndex + 1} не соответствуют предметам игры.`);
+          }
+          return [...coins];
+        });
+
+        if (saved.rewardedLevels.some(level => !Number.isInteger(level) || level < 0 || level >= LEVELS.length)
+          || new Set(saved.rewardedLevels).size !== saved.rewardedLevels.length
+          || saved.rewardedLevels.some(level => coinsByLevel[level].length !== REQUIRED_ITEMS)
+          || coinsByLevel.some((coins, level) => coins.length === REQUIRED_ITEMS && !saved.rewardedLevels.includes(level))) {
+          throw new Error("Неверный список наград за уровни.");
+        }
+
+        return { version: 1, coinsByLevel, rewardedLevels: [...saved.rewardedLevels] };
+      } catch (error) {
+        console.warn("Сохранённый прогресс повреждён; игра начнётся без него.", error);
+        return emptyGlobalProgress();
+      }
+    }
+
+    function saveGlobalProgress() {
+      try {
+        window.localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(globalProgress));
+      } catch (error) {
+        console.warn("Не удалось сохранить прогресс; он останется доступен до закрытия страницы.", error);
+      }
+    }
+
+    function updateGlobalStats() {
+      const coins = globalProgress.coinsByLevel.reduce((sum, levelCoins) => sum + levelCoins.length, 0);
+      const stars = globalProgress.rewardedLevels.length * 5;
+      totalCoins.textContent = `${coins} / ${LEVELS.length * REQUIRED_ITEMS}`;
+      totalStars.textContent = `${stars} / ${LEVELS.length * 5}`;
+      showFinalRewardButton.hidden = !isAllProgressComplete();
+    }
+
+    function isAllProgressComplete() {
+      return globalProgress.rewardedLevels.length === LEVELS.length
+        && LEVELS.every((_, levelIndex) => globalProgress.rewardedLevels.includes(levelIndex)
+          && globalProgress.coinsByLevel[levelIndex].length === REQUIRED_ITEMS);
+    }
+
+    function showFinalCompletionReward() {
+      if (!isAllProgressComplete()) return false;
+      reward.hidden = true;
+      finalReward.hidden = false;
+      finalRewardClose.focus();
+      return true;
+    }
+
+    function completeLevel(levelIndex) {
+      if (foundItems.size !== REQUIRED_ITEMS || globalProgress.rewardedLevels.includes(levelIndex)) return false;
+      globalProgress.rewardedLevels.push(levelIndex);
+      return true;
+    }
+
+    function showLevelReward(levelIndex) {
+      document.querySelector("#reward-title").textContent = `Уровень ${levelIndex + 1} пройден!`;
+      document.querySelector("#reward-message").textContent =
+        "Ты нашёл все 7 предметов. Награда за уровень: +5 золотых звёздочек!";
+      reward.hidden = false;
+      document.querySelector("#reward-restart").focus();
+    }
+
+    function updateProgress() {
+      progressCount.textContent = `${foundItems.size} / ${REQUIRED_ITEMS}`;
+      progressBar.setAttribute("aria-valuenow", String(foundItems.size));
+      progressFill.style.width = `${foundItems.size / REQUIRED_ITEMS * 100}%`;
+    }
+
+    function renderItems() {
+      grid.replaceChildren();
+      for (const [name, emoji] of shuffledItems) {
+        const isFound = foundItems.has(name);
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = `item-card${isFound ? " is-found" : ""}`;
+        button.setAttribute("aria-pressed", String(isFound));
+        button.setAttribute("aria-label", isFound
+          ? `${name}, найдено. Золотая монета. Нажми, чтобы услышать название.`
+          : `${name}. Нажми, чтобы услышать название.`);
+
+        const picture = document.createElement("span");
+        picture.className = `item-emoji${isFound ? " is-treasure" : ""}`;
+        picture.setAttribute("aria-hidden", "true");
+        if (isFound) picture.append(createTreasureCoin());
+        else appendWordIllustration(picture, name, emoji);
+        const label = document.createElement("span");
+        label.className = "item-name";
+        label.textContent = name;
+        button.append(picture, label);
+
+        button.addEventListener("click", () => {
+          speak(name);
+          if (hasTargetSound(name, LEVELS[activeLevel].sounds)) {
+            if (!foundItems.has(name)) {
+              foundItems.add(name);
+              const levelCoins = globalProgress.coinsByLevel[activeLevel];
+              if (!levelCoins.includes(name)) levelCoins.push(name);
+              const earnedNewLevelReward = completeLevel(activeLevel);
+              saveGlobalProgress();
+              updateGlobalStats();
+              updateProgress();
+              renderItems();
+              if (showFinalCompletionReward()) return;
+              if (earnedNewLevelReward) {
+                showLevelReward(activeLevel);
+                return;
+              }
+            }
+            setFeedback(`Верно! «${name}» — нужный звук есть.`, "good");
+          } else {
+            setFeedback(`«${name}» — попробуй поискать предмет с нужным звуком.`, "try");
+          }
+        });
+        grid.append(button);
+      }
+    }
+
+    function startLevel(index) {
+      activeLevel = index;
+      foundItems = new Set(globalProgress.coinsByLevel[index]);
+      shuffledItems = shuffle(LEVELS[index].items);
+      positionTaskIndex = 0;
+      positionCorrectAnswers = 0;
+      positionTaskFinished = false;
+      reward.hidden = true;
+      finalReward.hidden = true;
+      grid.setAttribute("data-level", String(index + 1));
+      levelButtons.forEach((button, buttonIndex) => {
+        button.setAttribute("aria-pressed", String(buttonIndex === index));
+      });
+      gameTitle.textContent = LEVELS[index].title;
+      updateGlobalStats();
+      updateProgress();
+      renderPositionTask();
+      setFeedback("Нажми на предмет — игра произнесёт его название.");
+      renderItems();
+    }
+
+    validatePositionTasks();
+
+    levelButtons.forEach(button => {
+      button.addEventListener("click", () => {
+        startLevel(Number(button.dataset.level));
+        levelSelect.hidden = true;
+        gameScreen.hidden = false;
+        gameTitle.focus();
+        gameScreen.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    });
+
+    backToLevels.addEventListener("click", () => {
+      gameScreen.hidden = true;
+      levelSelect.hidden = false;
+      levelButtons[activeLevel].focus();
+      levelSelect.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    positionNext.addEventListener("click", () => {
+      const tasks = LEVELS[activeLevel].positionTasks;
+      if (positionTaskFinished) {
+        positionTaskIndex = 0;
+        positionCorrectAnswers = 0;
+        renderPositionTask();
+        return;
+      }
+      if (positionTaskIndex < tasks.length - 1) {
+        positionTaskIndex++;
+        renderPositionTask();
+        return;
+      }
+      positionTaskFinished = true;
+      positionCount.textContent = "Готово!";
+      positionPrompt.textContent = `Задание завершено: ${positionCorrectAnswers} из ${tasks.length} верных ответов.`;
+      positionOptions.replaceChildren();
+      positionFeedback.textContent = "";
+      positionFeedback.className = "position-feedback";
+      positionNext.textContent = "Пройти ещё раз";
+      positionChestLink.hidden = false;
+      positionChestLink.focus();
+    });
+
+    positionChestLink.addEventListener("click", () => {
+      gameScreen.hidden = true;
+      levelSelect.hidden = false;
+      levelButtons[activeLevel].focus();
+      levelSelect.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    function restartPositionExercise() {
+      positionTaskIndex = 0;
+      positionCorrectAnswers = 0;
+      positionTaskFinished = false;
+      renderPositionTask();
+      reward.hidden = true;
+      setFeedback("Задание начато заново. Собранные монеты сохранены.");
+    }
+
+    document.querySelector("#restart-button").addEventListener("click", restartPositionExercise);
+    document.querySelector("#reward-restart").addEventListener("click", () => {
+      reward.hidden = true;
+      gameTitle.focus();
+    });
+
+    showFinalRewardButton.addEventListener("click", showFinalCompletionReward);
+    finalRewardClose.addEventListener("click", () => {
+      finalReward.hidden = true;
+      reward.hidden = true;
+      gameScreen.hidden = true;
+      levelSelect.hidden = false;
+      showFinalRewardButton.focus();
+    });
+
+    startOverButton.addEventListener("click", () => {
+      globalProgress = emptyGlobalProgress();
+      saveGlobalProgress();
+      foundItems = new Set();
+      finalReward.hidden = true;
+      reward.hidden = true;
+      gameScreen.hidden = true;
+      levelSelect.hidden = false;
+      updateGlobalStats();
+      updateProgress();
+      renderItems();
+      levelButtons[0].focus();
+    });
+
+    updateGlobalStats();
+  </script>
+</body>
+</html>

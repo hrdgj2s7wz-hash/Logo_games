@@ -1,5 +1,5 @@
-// Replace these clearly marked examples with your own games and real URLs.
 const games = [
+  { title: "Звуковая охота", genre: "Звуки Ш, Ж, Ч", description: "Ищи предметы со звуками Ш, Ж и Ч, слушай слова и собирай золотые монеты.", symbol: "Ш", tag: "Ш · Ж · Ч", colors: ["#75c9e8", "#b9e8f4"], url: "./games/zvukovaya-ohota/index.html", isLive: true },
   { title: "Собери слово", genre: "Чтение", description: "Складывай слоги и читай новые слова.", symbol: "А", tag: "Читаем", colors: ["#f3a276", "#f7c4a0"], url: "https://example.com/" },
   { title: "Звуковой поезд", genre: "Звуки С, З, Ц", description: "Помоги вагончикам найти слова с нужными звуками.", symbol: "С", tag: "С · З · Ц", colors: ["#a9d943", "#d7ed7b"], url: "https://example.com/" },
   { title: "Шипящий лабиринт", genre: "Звуки Ш, Ж, Ч", description: "Ищи дорожку к картинкам со звуками Ш, Ж и Ч.", symbol: "Ш", tag: "Ш · Ж · Ч", colors: ["#75c9e8", "#b9e8f4"], url: "https://example.com/" },
@@ -36,9 +36,9 @@ function renderGames() {
         <span class="cover-index">ИГРА ${String(games.indexOf(game) + 1).padStart(2, "0")}</span>
         <span class="cover-symbol" aria-hidden="true">${game.symbol}</span><span class="cover-tag">${game.tag}</span>
       </div>
-      <div class="game-info"><div class="game-meta"><span class="game-genre">${game.genre}</span><span>ДЕМО</span></div>
+      <div class="game-info"><div class="game-meta"><span class="game-genre">${game.genre}</span><span>${game.isLive ? "ИГРА" : "ДЕМО"}</span></div>
         <h3 class="game-title">${game.title}</h3><p class="game-description">${game.description}</p>
-        <a class="card-link" href="${game.url}" target="_blank" rel="noopener noreferrer" aria-label="Демонстрационная ссылка для игры «${game.title}» (откроется в новой вкладке)">Демо-ссылка <span aria-hidden="true">↗</span></a>
+        <a class="card-link" href="${game.url}" ${game.isLive ? "" : 'target="_blank" rel="noopener noreferrer"'} aria-label="${game.isLive ? "Открыть игру" : "Демонстрационная ссылка"} «${game.title}»${game.isLive ? "" : " (откроется в новой вкладке)"}">${game.isLive ? "Играть" : "Демо-ссылка"} <span aria-hidden="true">↗</span></a>
       </div></article>`;
   }).join("");
   emptyState.hidden = visibleGames.length > 0;
