@@ -86,7 +86,7 @@ h2 { margin: 0; font-size: 42px; font-weight: 700; letter-spacing: -2px; }
 .game-cover::before { width: 220px; height: 220px; }
 .game-cover::after { width: 160px; height: 160px; border-style: dashed; opacity: .7; }
 .cover-symbol { color: rgba(255,255,255,.9); font-size: 54px; filter: drop-shadow(0 8px 18px rgba(0,0,0,.35)); }
-.treasure-chest { width: min(150px, 72%); height: 112px; overflow: visible; filter: drop-shadow(0 8px 8px rgba(68, 34, 17, .24)); }
+.treasure-chest { width: min(124px, 68%); height: 124px; overflow: visible; filter: drop-shadow(0 8px 8px rgba(68, 34, 17, .24)); }
 .cover-index { position: absolute; top: 13px; left: 14px; color: rgba(52,35,29,.78); font-size: 9px; font-weight: 700; letter-spacing: 1px; }
 .cover-tag { position: absolute; right: 12px; bottom: 12px; padding: 5px 8px; border: 1px solid rgba(52,35,29,.2); border-radius: 4px; background: rgba(255,250,243,.78); color: #34231d; font-size: 8px; letter-spacing: 1px; text-transform: uppercase; }
 .game-info { padding: 16px 16px 14px; }
