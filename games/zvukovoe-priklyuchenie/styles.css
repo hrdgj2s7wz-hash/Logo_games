@@ -502,9 +502,6 @@ h1 span { color: var(--teal); }
 .hill-back { left: -7%; }
 .hill-front { right: -9%; background: #6e9d8a; transform: scaleX(-1); }
 .lake-water { position: absolute; top: 32%; right: -5%; bottom: 0; left: -5%; background: repeating-linear-gradient(0deg,transparent 0 31px,rgba(238,255,244,.28) 32px 35px,transparent 36px 62px),linear-gradient(180deg,#51b7c8,#378fae); }
-.lake-reeds { position: absolute; bottom: 14%; color: #497e54; font-size: 75px; line-height: 1; }
-.reeds-left { left: 3%; }
-.reeds-right { right: 4%; transform: scale(.85); }
 .lake-lily { position: absolute; z-index: 1; width: 35px; height: 15px; border-radius: 50%; background: #56a76a; }
 .lily-one { top: 57%; left: 21%; }
 .lily-two { top: 68%; right: 23%; transform: scale(.8); }
@@ -512,5 +509,4 @@ h1 span { color: var(--teal); }
 @media (max-width: 480px) {
   .meadow-fence { width: 15%; }
   .attic-box { transform: scale(.78); }
-  .lake-reeds { font-size: 58px; }
 }
