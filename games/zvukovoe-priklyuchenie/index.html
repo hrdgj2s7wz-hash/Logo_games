@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#183c51">
+  <meta name="description" content="Исследуй яркие 2D-локации и ищи звуки Ш, Ж, Ч и Щ в названиях предметов.">
+  <title>Приключение на звуки — Игровая полка</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="game.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Перейти к игре</a>
+  <div class="page-shell">
+    <header class="game-header">
+      <a class="back-link" href="../../index.html#catalog"><span aria-hidden="true">←</span> Каталог игр</a>
+      <a class="brand" href="../../index.html" aria-label="Игровая полка для логопеда">
+        <span class="brand-icon" aria-hidden="true">✦</span>
+        <span>Игровая полка<small>для логопеда</small></span>
+      </a>
+    </header>
+    <main id="main">
+      <section class="intro screen" id="intro-screen" aria-labelledby="game-title">
+        <div class="intro-copy">
+          <p class="eyebrow">ПРОГУЛКА ПО ВОЛШЕБНЫМ ЛОКАЦИЯМ</p>
+          <h1 id="game-title">Приключение<br><span>на звуки</span></h1>
+          <p class="intro-description">Гуляй по локациям, находи предметы и слушай их названия. Твоя задача — узнать, спрятался ли в слове нужный звук.</p>
+          <div class="how-to-play">
+            <span class="how-icon" aria-hidden="true">🎮</span>
+            <p><strong>Как играть</strong><br>Выбери звук, подойди к предмету и ответь «Есть!» или «Нет». На компьютере ходи стрелками или WASD, на телефоне — кнопками.</p>
+          </div>
+        </div>
+        <div class="sound-picker">
+          <p class="picker-title">Какой звук ищем?</p>
+          <div class="sound-list" id="sound-list" role="group" aria-label="Выбери звук для приключения"></div>
+          <button class="primary-button" id="start-button" type="button">Начать прогулку <span aria-hidden="true">→</span></button>
+          <p class="voice-note">🔊 Слова можно слушать. Озвучка работает в современных браузерах.</p>
+        </div>
+        <div class="intro-art" aria-hidden="true"><span class="art-cloud cloud-one">☁️</span><span class="art-cloud cloud-two">☁️</span><span class="art-island">🌳<br>🌼</span><span class="art-star">✦</span></div>
+      </section>
+
+      <section class="play-screen screen" id="play-screen" hidden aria-labelledby="room-title">
+        <div class="play-heading">
+          <div>
+            <p class="eyebrow" id="level-label">ЛОКАЦИЯ 1 ИЗ 4</p>
+            <h1 id="room-title">Звук Ш</h1>
+          </div>
+          <div class="play-actions">
+            <button class="quiet-button fullscreen-button" id="fullscreen-button" type="button" aria-label="На весь экран" aria-pressed="false">⛶ <span>На весь экран</span></button>
+            <button class="quiet-button" id="choose-sound-button" type="button">← Выбрать звук</button>
+          </div>
+        </div>
+        <div class="score-row">
+          <div class="progress-label"><span id="progress-copy">Предмет 1 из 8</span><span id="score-copy">⭐ 0</span></div>
+          <div class="progress-track" id="progress-track" role="progressbar" aria-label="Прогресс локации" aria-valuemin="0" aria-valuemax="8" aria-valuenow="0"><span id="progress-fill"></span></div>
+        </div>
+        <p class="room-instruction" id="room-instruction">Найди предмет в локации. Подойди поближе и нажми на него, чтобы ответить.</p>
+        <div class="stage-shell">
+          <div class="stage" id="stage" aria-label="2D-локация для исследования">
+            <div class="world" id="world">
+              <div class="garden-scene" aria-hidden="true">
+                <svg class="garden-path" viewBox="0 0 1000 760" preserveAspectRatio="none">
+                  <path class="path-shadow" d="M500 780C450 680 570 620 505 520S370 430 435 340 565 260 500 170 475 135 520 120"/>
+                  <path class="path-surface" d="M500 780C450 680 570 620 505 520S370 430 435 340 565 260 500 170 475 135 520 120"/>
+                  <path class="path-highlight" d="M500 780C450 680 570 620 505 520S370 430 435 340 565 260 500 170 475 135 520 120"/>
+                </svg>
+                <span class="garden-cloud cloud-left"></span>
+                <span class="garden-cloud cloud-right"></span>
+                <div class="garden-tree tree-back-left"><span class="tree-trunk"></span><span class="tree-crown crown-back"></span><span class="tree-crown crown-mid"></span><span class="tree-crown crown-top"></span></div>
+                <div class="garden-tree tree-back-right"><span class="tree-trunk"></span><span class="tree-crown crown-back"></span><span class="tree-crown crown-mid"></span><span class="tree-crown crown-top"></span></div>
+                <div class="garden-tree tree-front-left"><span class="tree-trunk"></span><span class="tree-crown crown-back"></span><span class="tree-crown crown-mid"></span><span class="tree-crown crown-top"></span></div>
+                <div class="garden-tree tree-front-right"><span class="tree-trunk"></span><span class="tree-crown crown-back"></span><span class="tree-crown crown-mid"></span><span class="tree-crown crown-top"></span></div>
+                <div class="garden-tree tree-middle-left"><span class="tree-trunk"></span><span class="tree-crown crown-back"></span><span class="tree-crown crown-mid"></span><span class="tree-crown crown-top"></span></div>
+                <div class="garden-tree tree-middle-right"><span class="tree-trunk"></span><span class="tree-crown crown-back"></span><span class="tree-crown crown-mid"></span><span class="tree-crown crown-top"></span></div>
+                <div class="garden-tree tree-far-left"><span class="tree-trunk"></span><span class="tree-crown crown-back"></span><span class="tree-crown crown-mid"></span><span class="tree-crown crown-top"></span></div>
+                <div class="garden-tree tree-far-right"><span class="tree-trunk"></span><span class="tree-crown crown-back"></span><span class="tree-crown crown-mid"></span><span class="tree-crown crown-top"></span></div>
+                <span class="garden-flower flower-left"><i></i><i></i><i></i><i></i><i></i><b></b></span>
+                <span class="garden-flower flower-right"><i></i><i></i><i></i><i></i><i></i><b></b></span>
+                <span class="garden-rock rock-left"></span>
+                <span class="garden-rock rock-right"></span>
+              </div>
+              <div class="meadow-scene" aria-hidden="true">
+                <span class="meadow-sun"></span><span class="meadow-hill hill-far"></span><span class="meadow-hill hill-near"></span>
+                <span class="meadow-fence fence-left"></span><span class="meadow-fence fence-right"></span>
+                <span class="meadow-butterfly butterfly-one">✦</span><span class="meadow-butterfly butterfly-two">✦</span>
+                <span class="meadow-flower flower-one">✿</span><span class="meadow-flower flower-two">✿</span><span class="meadow-flower flower-three">✿</span>
+              </div>
+              <div class="attic-scene" aria-hidden="true">
+                <span class="attic-beam beam-one"></span><span class="attic-beam beam-two"></span><span class="attic-beam beam-three"></span>
+                <span class="attic-window"></span><span class="attic-shelf"></span>
+                <span class="attic-box box-one"></span><span class="attic-box box-two"></span><span class="attic-lamp">✦</span>
+              </div>
+              <div class="lake-scene" aria-hidden="true">
+                <span class="lake-sun"></span><span class="lake-hill hill-back"></span><span class="lake-hill hill-front"></span>
+                <span class="lake-water"></span><span class="lake-reeds reeds-left">♧</span><span class="lake-reeds reeds-right">♧</span>
+                <span class="lake-lily lily-one"></span><span class="lake-lily lily-two"></span><span class="lake-boat">⌁</span>
+              </div>
+              <div class="room-wall wall-back" aria-hidden="true"></div>
+              <div class="room-wall wall-left" aria-hidden="true"></div>
+              <div class="floor" aria-hidden="true"><span class="floor-sun"></span></div>
+              <div class="scenery scenery-left potted-plant" aria-hidden="true"><i></i><i></i><i></i><b></b></div>
+              <div class="scenery scenery-right window-model" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+              <div class="objects" id="objects"></div>
+              <div class="player" id="player" aria-label="Смайлик-исследователь" aria-hidden="true">
+                <span class="player-smiley">😊</span>
+              </div>
+            </div>
+            <div class="stage-hud">
+              <div class="target-card">
+                <span class="target-icon" aria-hidden="true">🔎</span>
+                <span><small>ИЩЕМ ЗВУК</small><strong id="target-sound">Ш</strong></span>
+                <button class="listen-target" id="listen-target" type="button" aria-label="Послушать звук">🔊</button>
+              </div>
+              <p class="stage-hint" id="stage-hint" role="status" aria-live="polite">Ищи предметы в локации!</p>
+              <div class="nearby-card" id="nearby-card" hidden>
+                <span id="nearby-name"></span>
+                <button class="nearby-button" id="nearby-button" type="button">Исследовать</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="controls-row">
+          <div class="movement-help"><span class="key-hint" aria-hidden="true">↑ ↓ ← →</span><span>или WASD</span><small>Иди к предмету</small></div>
+          <div class="touch-controls" role="group" aria-label="Кнопки передвижения">
+            <button type="button" data-move="up" aria-label="Идти вперёд">↑</button>
+            <button type="button" data-move="left" aria-label="Идти влево">←</button>
+            <button type="button" data-move="down" aria-label="Идти назад">↓</button>
+            <button type="button" data-move="right" aria-label="Идти вправо">→</button>
+          </div>
+          <p class="distance-hint" id="distance-hint">Подойди к любому предмету</p>
+        </div>
+        <section class="answer-card" id="answer-card" hidden aria-labelledby="question-title">
+          <div class="answer-object" id="answer-object" aria-hidden="true"></div>
+          <div class="answer-content">
+            <p class="eyebrow">ПОСЛУШАЙ И ПОДУМАЙ</p>
+            <h2 id="question-title">Что это за предмет?</h2>
+            <button class="word-button" id="listen-word" type="button"><span aria-hidden="true">🔊</span> Послушать слово</button>
+            <div class="answer-buttons" id="answer-buttons">
+              <button class="answer-button yes-button" type="button" data-answer="yes">Есть звук <span id="yes-sound">Ш</span>!</button>
+              <button class="answer-button no-button" type="button" data-answer="no">Нет звука <span id="no-sound">Ш</span></button>
+            </div>
+            <p class="feedback" id="feedback" role="status" aria-live="assertive" hidden></p>
+          </div>
+          <button class="close-answer" id="close-answer" type="button" aria-label="Закрыть задание">×</button>
+        </section>
+      </section>
+
+      <section class="finish-screen screen" id="finish-screen" hidden aria-labelledby="finish-title">
+        <span class="finish-art" aria-hidden="true">🏆</span>
+        <p class="eyebrow">ЛОКАЦИЯ ИССЛЕДОВАНА!</p>
+        <h1 id="finish-title">Отличная работа!</h1>
+        <p class="finish-copy" id="finish-copy"></p>
+        <div class="finish-actions">
+          <button class="primary-button" id="next-sound-button" type="button">Следующий звук <span aria-hidden="true">→</span></button>
+          <button class="quiet-button" id="restart-button" type="button">Выбрать другой звук</button>
+        </div>
+      </section>
+    </main>
+    <footer class="game-footer">
+      <span>Автор: Logoped_Ada</span>
+      <a href="mailto:musalimova.ad@icloud.com?subject=%D0%9E%D1%88%D0%B8%D0%B1%D0%BA%D0%B0%20%D0%B2%20%D0%B8%D0%B3%D1%80%D0%B5%20%C2%AB%D0%9F%D1%80%D0%B8%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BD%D0%B0%20%D0%B7%D0%B2%D1%83%D0%BA%D0%B8%C2%BB">Сообщить об ошибке: musalimova.ad@icloud.com</a>
+      <a href="../../index.html#catalog">Все игры</a>
+    </footer>
+  </div>
+</body>
+</html>
